@@ -8,7 +8,7 @@ use Alresia\LaravelWassenger\Traits\WassengerRequest;
 /**
  * @internal
  */
-class Wassenger3
+class Wassenger
 {
     use WassengerRequest, Messages;
     

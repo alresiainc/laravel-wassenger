@@ -4,6 +4,7 @@ namespace Alresia\LaravelWassenger\Traits;
 use stdClass;
 use BadMethodCallException;
 use InvalidArgumentException;
+use Alresia\LaravelWassenger\Messages\WassengerMessagesRoute;
 
 trait Messages
 {
@@ -118,7 +119,7 @@ trait Messages
         if (Self::$buttons) $data->buttons = Self::$buttons;
 
         
-        return $this->Request('post', 'messages', $data);
+        return $this->Request(WassengerMessagesRoute::SEND_MESSAGE[1], WassengerMessagesRoute::SEND_MESSAGE[0], $data);
       
     }
    
