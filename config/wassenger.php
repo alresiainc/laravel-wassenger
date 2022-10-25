@@ -14,9 +14,10 @@ return [
     */
 
     'authorisation' => [
-        'token' => env('WASSENGER_TOKEN', 'sampleToken'),
-        'host'   => 'https://api.wassenger.com',
-        'version' => 1
+        'api_key' => env('WASSENGER_API_KEY', 'sampleToken'),
+        'api_host'   => env('WASSENGER_API_URL', 'https://api.wassenger.com'),
+        'api_version' => 1,
+        'device_id' => env('WASSENGER_DEVICE_ID'),
     ],
 
     /*
