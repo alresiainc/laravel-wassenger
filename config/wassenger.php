@@ -14,7 +14,7 @@ return [
     */
 
     'authorisation' => [
-        'api_key' => env('WASSENGER_API_KEY', 'sampleToken'),
+        'api_key' => env('WASSENGER_API_KEY', ''),
         'api_host'   => env('WASSENGER_API_URL', 'https://api.wassenger.com'),
         'api_version' => 1,
         'device_id' => env('WASSENGER_DEVICE_ID'),
