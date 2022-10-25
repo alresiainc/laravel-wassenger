@@ -18,7 +18,10 @@
         "laravel": {
             "providers": [
                 "Alresia\\LaravelWassenger\\WassengerServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "LaravelWassenger": "Alresia\\LaravelWassenger\\LaravelWassengerFacade"
+            }
         }
     },
     "minimum-stability": "dev",
