@@ -63,13 +63,13 @@ The following available methods for sending messages in this package, which you 
 | Method           | Description                                               | Parameters                                                                                        |
 | ---------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | `message()`      | Use to attached text and user phone number.               | `phone`(string:requires) , `message`  (string:required), `enqueue` (bool:optional)(default:false) |
-| `bulkMessage()`  | Attach a text with multiple numbers.                      |                                                                                                   |
-| `messageGroup()` | message a group.                                          |                                                                                                   |
-| `schedule`       | Schedule a Message.                                       |                                                                                                   |
-| `deliverAt`      | Schedule to a given time.                                 |                                                                                                   |
-| `media`          | Attach a file.                                            |                                                                                                   |
-| `buttons`        | Add action Buttons.                                       |                                                                                                   |
-| `send`           | The Method Use to send the message to Wassenger endpoint. |                                                                                                   |
+| `bulkMessage()`  | Attach a text with multiple numbers.                      |                  `phone`(arrays:requires) , `message`  (string:required), `enqueue` (bool:optional)                                                                                 |
+| `messageGroup()` | message a group.                                          |    `group_id`(string:requires) , `message`  (string:required), `enqueue` (bool:optional)                                                                                               |
+| `schedule()`       | Schedule a Message.                                       |   `delay`(string required)                                                                                                |
+| `deliverAt()`      | Schedule to a given time.                                 |          `ISO_Date` (required)                                                                                         |
+| `media()`          | Attach a file.                                            |     `file_array`(arrays)      `['file'=>'24 characters length file ID']`                                                                                     |
+| `buttons()`        | Add action Buttons.                                       |   `butttons_array()` Check documentation                                                                                               |
+| `send()`           | This method initailizes and connect to the message to Wassenger endpoint. |                   `none`                                                                              |
 
 # Example Usage
 
@@ -146,11 +146,15 @@ Wassenger::message('+1234567890', 'Hello world! This is a simple test message')
 
 
 ## Contributing
+All Contribution are welcome here. feel free to email me [Fidelis E Peter](mailto:fidelisepeter@gmail.com).
+
+Also you can drop an issue if you observe any
 
 Thank you for considering contributing to the Laravel Wassenger! 
 
+## Package
+This package doesn't require any extra packages
 
-## Contributing
+You can also use these package for **None Laravel App**
 
-Thank you for considering contributing to the Laravel Wassenger! 
 
