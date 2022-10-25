@@ -1,0 +1,26 @@
+{
+    "name": "alresia/laravel-wassenger",
+    "description": "WhatsApp Business Api for Larave Using Wassenger Api",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Alresia\\LaravelWassenger\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "fidelisepeter",
+            "email": "fidelisepeter@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Alresia\\LaravelWassenger\\WassengerServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
