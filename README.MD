@@ -26,8 +26,7 @@ return [
     'authorisation' => [
         'api_key' => env('WASSENGER_API_KEY', ''),
         'api_host'   => env('WASSENGER_API_URL', 'https://api.wassenger.com'),
-        'api_version' => 1,
-        'device_id' => env('WASSENGER_DEVICE_ID'),
+        'api_version' => 1
     ],
     'http_client' => [
         'return_json_errors' => false,
@@ -45,11 +44,6 @@ To get Your API KEY go to [Wassanger Console](https://app.wassenger.com/apikeys)
 WASSENGER_API_KEY=<YOUR_KEY_HERE>
 ```
 
-if you want to add your device ID you can do so by adding to .env file
-
-```php
-WASSENGER_DEVICE_ID=<YOUR_DEVICE_ID_HERE>
-```
 
 if you want the application to return a Json response instead of an Error Exception
 <br>
@@ -73,7 +67,6 @@ The following available methods for sending messages in this package, which you 
 | Method           | Description                                                               | Parameters                                                                                        |
 | ---------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | `message()`      | Use to attached text and user phone number.                               | `phone`(string:requires) , `message`  (string:required), `enqueue` (bool:optional)(default:false) |
-| `bulkMessage()`  | Attach a text with multiple numbers.                                      | `phone`(arrays:requires) , `message`  (string:required), `enqueue` (bool:optional)                |
 | `messageGroup()` | message a group.                                                          | `group_id`(string:requires) , `message`  (string:required), `enqueue` (bool:optional)             |
 | `schedule()`     | Schedule a Message.                                                       | `delay`(string required)                                                                          |
 | `deliverAt()`    | Schedule to a given time.                                                 | `ISO_Date` (required)                                                                             |
@@ -200,7 +193,7 @@ You can also use these package for **None Laravel App**
 if you want to use it for non Laravel Application head over to
 
 ```
-laravel-wassenger\src\config.php
+laravel-wassenger\src\Config.php
 
 ```
 to Setup Config
