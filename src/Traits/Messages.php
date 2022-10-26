@@ -1,15 +1,22 @@
 <?php
+
 namespace Alresia\LaravelWassenger\Traits;
 
 use stdClass;
 use BadMethodCallException;
 use InvalidArgumentException;
+use Alresia\LaravelWassenger\WassengerApiEndpoints;
+use Alresia\LaravelWassenger\Exceptions\LaravelWassengerException;
 
 trait Messages
 {
 
     private static $scheduleTo;
-    
+
+    private static $search_message;
+
+    private static $message_id;
+
     private static $data;
 
     private static $buttons;
@@ -28,9 +35,8 @@ trait Messages
         self::$data = $data;
 
         $instance = new self;
-
         return $instance;
-        // return $this;
+
     }
 
     public static function bulkMessage(array|object $phone, string $message, $enqueue = false)
@@ -44,12 +50,10 @@ trait Messages
         self::$data = $data;
 
         $instance = new self;
-
         return $instance;
-        // return $this;
     }
 
-    public function messageGroup(string $group, string $message, $priority = null)
+    public static function messageGroup(string $group, string $message, $priority = null)
     {
 
         $data = new stdClass();
@@ -58,7 +62,9 @@ trait Messages
         if ($priority == 'high') $data->priority = $priority;
         self::$data = $data;
 
-        return $this;
+        $instance = new self;
+
+        return $instance;
     }
 
 
@@ -74,7 +80,7 @@ trait Messages
         if ($ISO_Date != null) $dateTime = \DateTime::createFromFormat(\DateTime::ISO8601, $ISO_Date);
 
         if ($dateTime) self::$scheduleTo = ['deliverAt' => $dateTime->format(\DateTime::ISO8601)];
-        else throw new InvalidArgumentException('Given Date is not a valid ISO 8601 date', 100);
+        else throw new InvalidArgumentException('Given Date is not a valid ISO 8601 date');
 
         return $this;
     }
@@ -101,8 +107,7 @@ trait Messages
 
         $data = self::$data;
         if ($data == null) {
-            throw new BadMethodCallException('Your Request is a Missing A Required Method', 100);
-            trigger_error("Value must be 1 or below");
+            throw new BadMethodCallException('Your Request is a Missing A Required Method');
         }
         // $schduleTo = Self::$scheduleTo;
 
@@ -114,12 +119,113 @@ trait Messages
             if (count(self::$file) == 2)
 
                 $data->media = (object) [self::$file[0] => self::$file[1]];
-        
+
         if (Self::$buttons) $data->buttons = Self::$buttons;
 
-        
-        return $this->Request('post', 'messages', $data);
-      
+        $response = $this->Request(WassengerApiEndpoints::SEND_MESSAGE, $data);
+
+        return $response;
     }
-   
+
+    public function update()
+    {
+
+        if (isset(self::$message_id) && !empty(self::$message_id)) {
+            $id = self::$message_id;
+
+
+            $data = self::$data;
+            if ($data == null) {
+                throw new BadMethodCallException('Your Request is a Missing A Required Method');
+                trigger_error("Value must be 1 or below");
+            }
+
+
+            if (is_array(self::$scheduleTo) || is_object(self::$scheduleTo)) {
+                if (array_keys(self::$scheduleTo)[0] == 'delayTo') {
+                    $data->schedule = self::$scheduleTo;
+                } elseif (array_keys(self::$scheduleTo)[0] == 'deliverAt') {
+                    $data->deliverAt = array_values(self::$scheduleTo)[0];
+                }
+            }
+
+            if (self::$file) {
+                if (count(self::$file) == 2) {
+                    $data->media = (object) [self::$file[0] => self::$file[1]];
+                }
+            }
+
+            if (self::$buttons) {
+                $data->buttons = self::$buttons;
+            }
+
+
+            return $this->Request(WassengerApiEndpoints::UPDATE_MESSAGE, $data, $id);
+        } else {
+            throw new LaravelWassengerException('Invalid ID: Please Specify an ID using the findById() Method');
+        }
+    }
+
+    public static function search(array|object $request_array)
+    {
+
+        if (is_array($request_array) || is_object($request_array))
+            self::$search_message = $request_array;
+
+        $instance = new self;
+
+        return $instance;
+    }
+
+    public static function findById(string $message_id)
+    {
+
+        if (isset($message_id))
+            self::$message_id = $message_id;
+        $instance = new self;
+        return $instance;
+    }
+
+
+    public function get()
+    {
+
+        $data = self::$data;
+        if (isset(self::$search_message) && !empty(self::$search_message)) {
+
+            $data = self::$search_message;
+            return $this->Request(WassengerApiEndpoints::SEARCH_MESSAGES, $data);
+        } elseif (isset(self::$message_id) && !empty(self::$message_id)) {
+
+            $id = self::$message_id;
+            return $this->Request(WassengerApiEndpoints::GET_MESSAGE_BY_ID, null, $id);
+        }
+    }
+
+    public static function find(array|object $request_array)
+    {
+
+        if (isset($request_array) && !empty($request_array)) {
+            $data = $request_array;
+            $instance = new self;
+            return $instance->Request(WassengerApiEndpoints::SEARCH_MESSAGES, $data);
+        }
+    }
+
+    public static function delete(string $message_id = null)
+    {
+        $instance = new self;
+        $id = $message_id ?? self::$message_id;
+        if (isset(self::$message_id) && !empty(self::$message_id)) {
+
+            return $instance->Request(WassengerApiEndpoints::DELETE_MESSAGE, null, self::$message_id);
+
+        }elseif (isset($message_id) && !empty($message_id)) {
+            
+            return $instance->Request(WassengerApiEndpoints::DELETE_MESSAGE, null, $message_id);
+
+        } else {
+            throw new LaravelWassengerException('Invalid ID: Please Specify an ID or use the findById() Method');
+        }
+    }
 }

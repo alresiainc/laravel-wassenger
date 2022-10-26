@@ -9,6 +9,17 @@ use Alresia\LaravelWassenger\Traits\Messages;
  */
 class Wassenger
 {
+
+     /*
+    |--------------------------------------------------------------------------
+    | Laravel Wassenger
+    |--------------------------------------------------------------------------
+    |
+    | Main Laravel Wassenger Class
+    |
+    */
+
     use WassengerRequest, Messages;
+
     
 }

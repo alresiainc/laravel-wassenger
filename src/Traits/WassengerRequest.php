@@ -1,6 +1,8 @@
 <?php
+
 namespace Alresia\LaravelWassenger\Traits;
 
+use Alresia\LaravelWassenger\Config;
 use Alresia\LaravelWassenger\Exceptions\LaravelWassengerException;
 use Alresia\LaravelWassenger\Exceptions\LaravelWassengerInvalidApiKey;
 
@@ -48,28 +50,53 @@ trait WassengerRequest
      */
     public $api_version;
 
+    /**
+     * Display Error or Return in Code
+     *
+     * @var int
+     */
+    public $return_json_errors;
+
 
     /**
      * @internal
      */
     public function __construct()
     {
-        $this->api_key = config('wassenger.authorisation.api_key');
-        $this->device_id = config('wassenger.authorisation.device_id');
-        $this->api_url = config('wassenger.authorisation.api_url');
-        $this->api_version = config('wassenger.authorisation.api_version');
-        
+        if (\function_exists('config')) {
+            $this->api_key = config('wassenger.authorisation.api_key');
+            $this->api_url = config('wassenger.authorisation.api_host');
+            $this->api_version = config('wassenger.authorisation.api_version');
+            $this->return_json_errors = config('wassenger.http_client.return_json_errors');
+        } else {
+            
+            $this->api_key = Config::API_KEY;
+            $this->api_url = Config::API_HOST;
+            $this->api_version = Config::API_VERSION;
+            $this->return_json_errors = Config::RETURN_JSON_ERRORS;
+        }
     }
 
     /**
      * 
-     * @param string $method
-     * @param string $path
+     * @param Alresia\LaravelWassenger\WassengerMessagesRoute $routeName
      * @param object|array $param
-     * 
+     * @param string $param
      */
-    public function Request($method, $path, $params = array())
+    public function Request($routeName, $params = null, $attachment = null)
     {
+
+
+
+        $method = $routeName[1];
+        $path = $routeName[0];
+        if (isset($routeName[2])) {
+            $attached = $routeName[2];
+        } else {
+            $attached = false;
+        }
+
+
 
         if (!is_callable('curl_init')) {
             throw new LaravelWassengerException("cURL extension is disabled on your server");
@@ -79,51 +106,67 @@ trait WassengerRequest
             throw new LaravelWassengerInvalidApiKey("Missing or Invalid Api Key");
         }
 
-        $url = $this->api_url . "/" . $path;
-        $data = http_build_query($params);
 
-        $header = [
+        if ($attached == true && $attachment != null) {
+            $url = $this->api_url . "/v" . $this->api_version . "/" . $path . "/" . $attachment;
+        } else {
+            $url = $this->api_url . "/v" . $this->api_version . "/" . $path;
+        };
+
+        if (isset($params) && !empty($params)) {
+            $data = http_build_query($params);
+        } else {
+            $data = '';
+        }
+
+        $request_header = [
             "Content-Type: application/json",
             "token: " . $this->api_key
         ];
 
-        dd($params);
 
         if (strtolower($method) == "get") $url = $url . '?' . $data;
         $curl = curl_init($url);
-        if (strtolower($method) == "post") {
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
+
+        if (strtolower($method) != "get") {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+            if (isset($params)) {
+                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
+            }
         }
+
         curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
         curl_setopt($curl, CURLOPT_TIMEOUT, 30);
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         curl_setopt($curl, CURLOPT_ENCODING, '');
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $request_header);
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
-
-        if ($err) {
-            return "cURL Error #:" . $err;
-        } else {
-            return $response;
-        }
-
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
 
         $contentType = curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
         $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
 
-        $header = substr($response, 0, $header_size);
-        $body = substr($response, $header_size);
-
         curl_close($curl);
 
+        if ($err) {
+            throw new LaravelWassengerException('cURL Error #:' . $err);
+        } elseif ($this->return_json_errors == false && $httpCode >= 400) {
+
+            $error = json_decode($response);
+            $errorCode = $error->errorCode ?? "Error";
+            $errorStatus = $error->status ?? "";
+            $errorMessage = $error->message ?? "An Unknow Error Has Occured";
+
+            throw new LaravelWassengerException('Wassenger ' . $errorCode . '[' . $errorStatus . ']: ' . $errorMessage);
+        }
+
         if (strpos($contentType, 'application/json') !== false) {
-            return json_decode($body);
+            $body = json_decode($response);
+        } else {
+            $body = $response;
         }
 
         return $body;

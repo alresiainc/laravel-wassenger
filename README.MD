@@ -1,7 +1,7 @@
 # Laravel Wassenger
 
 WhatsApp Business Api for Larave Using Wassenger Api
-
+![laravel-wassenger-logo](https://user-images.githubusercontent.com/42520408/197910318-c42baeae-9799-4b43-8bc1-94bf3cdd95cb.png)
 For more info about Wassenger follow https://www.wassenger.com/
 
 ## Installation by console
@@ -30,7 +30,7 @@ return [
         'device_id' => env('WASSENGER_DEVICE_ID'),
     ],
     'http_client' => [
-        'timeout' => 60,
+        'return_json_errors' => false,
     ],
 ];
 ```
@@ -51,6 +51,16 @@ if you want to add your device ID you can do so by adding to .env file
 WASSENGER_DEVICE_ID=<YOUR_DEVICE_ID_HERE>
 ```
 
+if you want the application to return a Json response instead of an Error Exception
+<br>
+Change the `return_json_errors` to true from the config file
+
+```php
+'http_client' => [
+        'return_json_errors' => true,
+    ],
+```
+
 ## Sending Messages
 
 To use include the `LaravelWassenger\Wassenger` class in your controller;
@@ -60,16 +70,21 @@ use Alresia\LaravelWassenger\Wassenger;
 
 The following available methods for sending messages in this package, which you can [See the full details here](https://app.wassenger.com/docs/#tag/Messages):
 
-| Method           | Description                                               | Parameters                                                                                        |
-| ---------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `message()`      | Use to attached text and user phone number.               | `phone`(string:requires) , `message`  (string:required), `enqueue` (bool:optional)(default:false) |
-| `bulkMessage()`  | Attach a text with multiple numbers.                      |                  `phone`(arrays:requires) , `message`  (string:required), `enqueue` (bool:optional)                                                                                 |
-| `messageGroup()` | message a group.                                          |    `group_id`(string:requires) , `message`  (string:required), `enqueue` (bool:optional)                                                                                               |
-| `schedule()`       | Schedule a Message.                                       |   `delay`(string required)                                                                                                |
-| `deliverAt()`      | Schedule to a given time.                                 |          `ISO_Date` (required)                                                                                         |
-| `media()`          | Attach a file.                                            |     `file_array`(arrays)      `['file'=>'24 characters length file ID']`                                                                                     |
-| `buttons()`        | Add action Buttons.                                       |   `butttons_array()` Check documentation                                                                                               |
-| `send()`           | This method initailizes and connect to the message to Wassenger endpoint. |                   `none`                                                                              |
+| Method           | Description                                                               | Parameters                                                                                        |
+| ---------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `message()`      | Use to attached text and user phone number.                               | `phone`(string:requires) , `message`  (string:required), `enqueue` (bool:optional)(default:false) |
+| `bulkMessage()`  | Attach a text with multiple numbers.                                      | `phone`(arrays:requires) , `message`  (string:required), `enqueue` (bool:optional)                |
+| `messageGroup()` | message a group.                                                          | `group_id`(string:requires) , `message`  (string:required), `enqueue` (bool:optional)             |
+| `schedule()`     | Schedule a Message.                                                       | `delay`(string required)                                                                          |
+| `deliverAt()`    | Schedule to a given time.                                                 | `ISO_Date` (required)                                                                             |
+| `media()`        | Attach a file.                                                            | `file_array`(arrays)      `['file'=>'24 characters length file ID']`                              |
+| `buttons()`      | Add action Buttons.                                                       | `butttons_array()` Check documentation                                                            |
+| `findById()`     | Get a specific message by ID.                                             | `string`                                                                                          |
+| `search()`       | Searching from message list.                                              | `arrays` (required)                                                                               |
+| `find()`         | Alternatives for `search()`.                                              | `arrays` (required)                                                                               |
+| `get()`          | Get the Specific Resource.                                                | `null`                                                                                            |
+| `delete()`       | Delete the specific resource.                                             | `string`  `null`                                                                                  |
+| `send()`         | This method initailizes and connect to the message to Wassenger endpoint. | `none`                                                                                            |
 
 # Example Usage
 
@@ -143,6 +158,31 @@ Wassenger::message('+1234567890', 'Hello world! This is a simple test message')
     ->send();
 ```
 
+### Getting a Message
+
+```php
+Wassenger::findById('635889e9133a76fddfdfy65r5')
+    ->get();
+```
+
+### Updating a Message
+
+```php
+Wassenger::findById('635889e9133a76fddfdfy65r5')
+    ->message('+1234567890', 'Hello world! This is a simple test message')
+    ->update();
+```
+
+### Deleting a Message
+
+```php
+Wassenger::findById('635889e9133a76fddfdfy65r5')
+    ->delete();
+```
+Alternatively you can delete a message passing the message ID inside the `delete()` mothod with using the `findById()` method
+```php
+Wassenger::delete('635889e9133a76fddfdfy65r5');
+```
 
 
 ## Contributing
@@ -157,4 +197,19 @@ This package doesn't require any extra packages
 
 You can also use these package for **None Laravel App**
 
+if you want to use it for non Laravel Application head over to
+
+```
+laravel-wassenger\src\config.php
+
+```
+to Setup Config
+
+```php
+public const API_KEY = '';
+public const API_HOST = 'https://api.wassenger.com';
+public const API_VERSION = 1;
+
+public const RETURN_JSON_ERRORS = false;
+```
 

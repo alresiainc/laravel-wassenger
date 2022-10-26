@@ -1,5 +1,15 @@
 <?php
 
+/*
+    |--------------------------------------------------------------------------
+    | Configuration file for Laravel Application
+    |--------------------------------------------------------------------------
+    |
+    | Publish this config into Laravel Config Directory
+    | Check Documentation
+    |
+    */
+
 return [
 
     /*
@@ -29,6 +39,6 @@ return [
     */
 
     'http_client' => [
-        'timeout' => 60,
+        'return_json_errors' => false,
     ],
 ];
