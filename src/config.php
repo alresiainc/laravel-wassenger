@@ -23,7 +23,6 @@ class Config
     public const API_HOST = 'https://api.wassenger.com';
     public const API_VERSION = 1;
 
-
     /*
     |--------------------------------------------------------------------------
     | HTTP CLIENT CONFIGURATION
