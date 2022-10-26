@@ -86,8 +86,6 @@ trait WassengerRequest
     public function Request($routeName, $params = null, $attachment = null)
     {
 
-
-
         $method = $routeName[1];
         $path = $routeName[0];
         if (isset($routeName[2])) {
@@ -95,7 +93,6 @@ trait WassengerRequest
         } else {
             $attached = false;
         }
-
 
 
         if (!is_callable('curl_init')) {

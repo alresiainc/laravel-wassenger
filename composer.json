@@ -4,7 +4,7 @@
     "keywords": ["WhatsApp", "Wassenger", "LaravelWassenger", "WhatsAppApi", "WhatsAppBusness"],
     "type": "library",
     "license": "MIT",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "homepage": "https://github.com/alresiainc/laravel-wassenger",
     "minimum-stability": "stable",
     "prefer-stable": true,

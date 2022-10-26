@@ -2,7 +2,10 @@
 
 WhatsApp Business Api for Larave Using Wassenger Api
 ![laravel-wassenger-logo](https://user-images.githubusercontent.com/42520408/197910318-c42baeae-9799-4b43-8bc1-94bf3cdd95cb.png)
-For more info about Wassenger follow https://www.wassenger.com/
+
+> For more info about Wassenger follow [https://www.wassenger.com](https://www.wassenger.com/).
+
+
 
 ## Installation by console
 
@@ -34,11 +37,11 @@ return [
 ];
 ```
 
-### Api Keys
+## Api Keys
 Head over to your .env file and add your Api Key, Device ID 
 The WASSENGER_API_KEY is Required
 
-To get Your API KEY go to [Wassanger Console](https://app.wassenger.com/apikeys) add Get a Api Key
+>To get Your API KEY go to [Wassanger Console](https://app.wassenger.com/apikeys) add Get a Api Key
 
 ```php
 WASSENGER_API_KEY=<YOUR_KEY_HERE>
@@ -109,7 +112,8 @@ Wassenger::message('+1234567890', 'Hello world! This is a simple test message', 
     ->send();
 ```
 
-### Send a scheduled messages with a custom delay. See "schedule.delayTo" datetime notation shortcuts: https://i.ibb.co/g3DJLSH/datetime-shortcuts.png
+### Send a scheduled messages with a custom delay. 
+>See "schedule.delayTo" datetime notation shortcuts: https://i.ibb.co/g3DJLSH/datetime-shortcuts.png
 
 ```php
 Wassenger::message('+1234567890', 'Hello world! This is a simple test message')
@@ -172,7 +176,7 @@ Wassenger::findById('635889e9133a76fddfdfy65r5')
 Wassenger::findById('635889e9133a76fddfdfy65r5')
     ->delete();
 ```
-Alternatively you can delete a message passing the message ID inside the `delete()` mothod with using the `findById()` method
+>Alternatively you can delete a message passing the message ID inside the `delete()` mothod with using the `findById()` method
 ```php
 Wassenger::delete('635889e9133a76fddfdfy65r5');
 ```
@@ -205,4 +209,4 @@ public const API_VERSION = 1;
 
 public const RETURN_JSON_ERRORS = false;
 ```
-
+>**NOTE:** Changing host and version either from the Config.php or the wassenger.php is not neccessary unless if you know what you are doing
