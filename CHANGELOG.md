@@ -7,7 +7,7 @@
 ------------------
 
 * Added Extra Wassenger Endpoint.
-* Added New Messages Class `Alresia\LaravelWassenger`
+* Added New Messages Class `Alresia\LaravelWassenger\Messages`
   <br>
   Messaging functions can also be called with
 ```php
