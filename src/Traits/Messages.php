@@ -10,6 +10,7 @@ use Alresia\LaravelWassenger\Exceptions\LaravelWassengerException;
 
 trait Messages
 {
+    use WassengerRequest;
 
     private static $scheduleTo;
 
@@ -23,7 +24,41 @@ trait Messages
 
     private static $file;
 
-    private static $isBulk = false;
+    private static $header;
+
+    private static $footer;
+
+    private static $device;
+
+    private static $agent;
+
+    private static $contacts;
+
+    private static $location;
+
+    private static $expiration;
+
+    private static $RawData;
+
+    /** 
+     * Send message
+     * 
+     * Send new text, to a given phone number.
+     * 
+     * */ 
+
+    public function checkNumber(string $number)
+    {
+
+        if (isset($number)){
+            
+            $data = new stdClass();
+            $data->phone = $number;
+            return $this->Request(WassengerApiEndpoints::NUMBER_EXIST, $data);
+        }
+           
+
+    }
 
     public static function message($phone, $message, $enqueue = false)
     {
@@ -39,20 +74,24 @@ trait Messages
 
     }
 
-    public static function bulkMessage(array|object $phone, string $message, $enqueue = false)
+    public static function raw(array|object $data)
     {
-
-        self::$isBulk = true;
-        $data = new stdClass();
-        $data->phone = $phone;
-        $data->message = $message;
-        if ($enqueue === false) $data->enqueue = 'never';
-        self::$data = $data;
+        
+        if (is_array($data)){
+            
+            self::$RawData = $data;
+        }
 
         $instance = new self;
         return $instance;
     }
 
+    /** 
+     * Message Group
+     * 
+     * Send new text, to a Group using an ID.
+     * 
+     * */ 
     public static function messageGroup(string $group, string $message, $priority = null)
     {
 
@@ -67,6 +106,12 @@ trait Messages
         return $instance;
     }
 
+    /** 
+     * Message Schedule
+     * 
+     * Send messages in a predefined date/time
+     * 
+     * */ 
 
     public function schedule($delay = null)
     {
@@ -86,12 +131,66 @@ trait Messages
     }
 
 
+    /** 
+     * Media Message
+     * 
+     * Send image, documents or binary archives
+     * 
+     * */ 
     public function media($file)
     {
         self::$file = $file;
         return $this;
     }
 
+
+    public function contacts(array|object $contacts_array)
+    {
+
+        if (is_array($contacts_array) || is_object($contacts_array))
+            self::$contacts = $contacts_array;
+
+        return $this;
+    }
+
+    public function expiration(array|object $expiration_array)
+    {
+
+        if (is_array($expiration_array) || is_object($expiration_array))
+            self::$expiration = $expiration_array;
+
+        return $this;
+    }
+
+
+    public function location(array|object $location_array)
+    {
+
+        if (is_array($location_array) || is_object($location_array))
+            self::$location = $location_array;
+
+        return $this;
+    }
+
+    public function agent(string $agent)
+    {
+
+        if (isset($agent))
+            self::$agent = $agent;
+
+        return $this;
+    }
+
+    public function device(string $device)
+    {
+
+        if (isset($device))
+            self::$device = $device;
+
+        return $this;
+    }
+
+    
 
     public function buttons(array|object $buttons_array)
     {
@@ -102,15 +201,49 @@ trait Messages
         return $this;
     }
 
+    public function header(string $text)
+    {
+
+        if (isset($text))
+            self::$header = $text;
+
+        return $this;
+    }
+
+    public function footer(string $text)
+    {
+
+        if (isset($text))
+            self::$footer = $text;
+
+        return $this;
+    }
+
     public function send()
     {
 
         $data = self::$data;
-        if ($data == null) {
+        $RawData = self::$RawData;
+
+        if ($data == null && $RawData == null) {
             throw new BadMethodCallException('Your Request is a Missing A Required Method');
         }
-        // $schduleTo = Self::$scheduleTo;
 
+       
+
+        $checkNumber = $this->checkNumber($data->phone);
+
+        if($checkNumber->exists != true){
+
+            return $checkNumber;
+        }
+
+
+        if (is_array($RawData) || is_object($RawData)) {
+
+            return $this->Request(WassengerApiEndpoints::SEND_MESSAGE, $RawData);
+        }
+       
         if (is_array(Self::$scheduleTo) || is_object(Self::$scheduleTo))
             if (array_keys(Self::$scheduleTo)[0] == 'delayTo') $data->schedule = Self::$scheduleTo;
             elseif (array_keys(Self::$scheduleTo)[0] == 'deliverAt') $data->deliverAt = array_values(Self::$scheduleTo)[0];
@@ -121,7 +254,14 @@ trait Messages
                 $data->media = (object) [self::$file[0] => self::$file[1]];
 
         if (Self::$buttons) $data->buttons = Self::$buttons;
-
+        if (Self::$header) $data->header = Self::$header;
+        if (Self::$footer) $data->footer = Self::$footer;
+        if (Self::$device) $data->device = Self::$device;
+        if (Self::$agent) $data->agent = Self::$agent;
+        if (Self::$contacts) $data->contacts = Self::$contacts;
+        if (Self::$location) $data->location = Self::$location;
+        if (Self::$expiration) $data->expiration = Self::$expiration;
+        
         $response = $this->Request(WassengerApiEndpoints::SEND_MESSAGE, $data);
 
         return $response;
@@ -166,6 +306,15 @@ trait Messages
         }
     }
 
+
+    /**
+     * Search outbound messages, optionally filtered by customer search params. 
+     * 
+     * ************************************************************************
+     * 
+     * @param array|object $request_array
+     * 
+     */
     public static function search(array|object $request_array)
     {
 
@@ -219,11 +368,9 @@ trait Messages
         if (isset(self::$message_id) && !empty(self::$message_id)) {
 
             return $instance->Request(WassengerApiEndpoints::DELETE_MESSAGE, null, self::$message_id);
+        } elseif (isset($message_id) && !empty($message_id)) {
 
-        }elseif (isset($message_id) && !empty($message_id)) {
-            
             return $instance->Request(WassengerApiEndpoints::DELETE_MESSAGE, null, $message_id);
-
         } else {
             throw new LaravelWassengerException('Invalid ID: Please Specify an ID or use the findById() Method');
         }
