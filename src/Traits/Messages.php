@@ -74,7 +74,7 @@ trait Messages
 
     }
 
-    public static function raw(array|object $data)
+    public static function raw($data)
     {
         
         if (is_array($data)){
@@ -144,7 +144,7 @@ trait Messages
     }
 
 
-    public function contacts(array|object $contacts_array)
+    public function contacts($contacts_array)
     {
 
         if (is_array($contacts_array) || is_object($contacts_array))
@@ -153,7 +153,7 @@ trait Messages
         return $this;
     }
 
-    public function expiration(array|object $expiration_array)
+    public function expiration($expiration_array)
     {
 
         if (is_array($expiration_array) || is_object($expiration_array))
@@ -163,7 +163,7 @@ trait Messages
     }
 
 
-    public function location(array|object $location_array)
+    public function location($location_array)
     {
 
         if (is_array($location_array) || is_object($location_array))
@@ -192,7 +192,7 @@ trait Messages
 
     
 
-    public function buttons(array|object $buttons_array)
+    public function buttons($buttons_array)
     {
 
         if (is_array($buttons_array) || is_object($buttons_array))
@@ -312,10 +312,10 @@ trait Messages
      * 
      * ************************************************************************
      * 
-     * @param array|object $request_array
+     * @param $request_array
      * 
      */
-    public static function search(array|object $request_array)
+    public static function search($request_array)
     {
 
         if (is_array($request_array) || is_object($request_array))
@@ -351,7 +351,7 @@ trait Messages
         }
     }
 
-    public static function find(array|object $request_array)
+    public static function find($request_array)
     {
 
         if (isset($request_array) && !empty($request_array)) {

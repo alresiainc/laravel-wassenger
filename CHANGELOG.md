@@ -1,7 +1,23 @@
-1.0.0 (2022-10-26)
+1.1.1 (2022-11-05)
 ------------------
 
-* Official Release.
+* Fix Minor Bug.
+* Added New Session Class `Alresia\LaravelWassenger\Session`
+  <br>
+  The Session Class Can Be Used to Sync Device Sessions for now
+  `More update Coming...`
+  Usage
+```php
+
+Session::sync('deviceId');
+
+```
+it can also be called from Wassenger Main Class `Alresia\LaravelWassenger\Wassenger`
+```php
+Wassenger::sessionSync('deviceId');
+
+```
+
 
 1.1.0 (2022-11-01)
 ------------------
@@ -22,3 +38,11 @@ Wassenger::numberExist('+1234567890');
 ```
 
 * Added Auto Checking Number before executing `send()`
+  
+
+
+
+1.0.0 (2022-10-26)
+------------------
+
+* Official Release.

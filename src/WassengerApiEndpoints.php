@@ -20,7 +20,8 @@ class WassengerApiEndpoints
     public const DELETE_MESSAGE = ['messages', 'DELETE', true];
 
 
-    public const NUMBER_EXIST = ['numbers/exist', 'POST'];
+    public const NUMBER_EXIST = ['numbers/exists', 'POST'];
+    public const DEVICE_SYNC = ['devices/{deviceId}/sync', 'GET'];
    
     
 }

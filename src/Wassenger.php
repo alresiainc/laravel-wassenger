@@ -1,4 +1,5 @@
 <?php
+
 namespace Alresia\LaravelWassenger;
 
 use stdClass;
@@ -12,7 +13,7 @@ use Alresia\LaravelWassenger\Traits\WassengerRequest;
 class Wassenger
 {
 
-     /*
+    /*
     |--------------------------------------------------------------------------
     | Laravel Wassenger
     |--------------------------------------------------------------------------
@@ -31,20 +32,30 @@ class Wassenger
      * @param array|object $request_array
      * 
      */
+
+   
+
     public static function numberExist(string $number)
     {
 
-        if (isset($number)){
-            
+        if (isset($number)) {
+
             $data = new stdClass();
             $data->phone = $number;
             $instance = new self;
 
             return $instance->Request(WassengerApiEndpoints::NUMBER_EXIST, $data);
         }
-           
-
     }
 
-    
+    public static function sessionSync(string $deviceId)
+    {
+
+        if (isset($deviceId)) {
+
+            $instance = new self;
+
+            return $instance->Request(WassengerApiEndpoints::DEVICE_SYNC, null, ['deviceId' => $deviceId]);
+        }
+    }
 }

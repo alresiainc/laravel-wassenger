@@ -69,7 +69,7 @@ trait WassengerRequest
             $this->api_version = config('wassenger.authorisation.api_version');
             $this->return_json_errors = config('wassenger.http_client.return_json_errors');
         } else {
-            
+
             $this->api_key = Config::API_KEY;
             $this->api_url = Config::API_HOST;
             $this->api_version = Config::API_VERSION;
@@ -77,17 +77,52 @@ trait WassengerRequest
         }
     }
 
+    public function routeWorker($url = '', $data = [], $auto = false)
+    {
+        $clean = false;
+        $pattern = "/({\w+})/";
+
+        $isIndexed = array_unique(array_map("is_int", array_keys($data))) === array(true);
+        $isAssoc = array_unique(array_map("is_string", array_keys($data))) === array(true);
+
+        if ($auto == true) {
+
+            $data = array_values($data);
+            if (preg_match_all($pattern, $url, $matches)) {
+                $url = implode('/', array_unique(explode('/', str_replace($matches[0], $data, $url))));
+            }
+        } elseif ($isIndexed) {
+
+            if (preg_match_all($pattern, $url, $matches)) {
+                $url = str_replace($matches[0], $data, $url);
+            }
+        } elseif ($isAssoc) {
+            foreach ($data as $key => $value) {
+
+                $url = str_replace('//', '/', str_replace('{' . $key . '}', $value, $url));
+            }
+        }
+
+        if (!preg_match("/({\w+})/", $str)) $clean = true;
+
+        $value = ['clean' => $clean, 'value' => $url];
+
+        return $url;
+    }
+
+
     /**
      * 
      * @param Alresia\LaravelWassenger\WassengerMessagesRoute $routeName
      * @param object|array $param
      * @param string $param
      */
-    public function Request($routeName, $params = null, $attachment = null)
+    public function Request($routeName, $params = null, $attachment = null, $routeData = null)
     {
 
         $method = $routeName[1];
-        $path = $routeName[0];
+        $path = $this->routeWorker($routeName[0], $routeData, true);
+
         if (isset($routeName[2])) {
             $attached = $routeName[2];
         } else {
