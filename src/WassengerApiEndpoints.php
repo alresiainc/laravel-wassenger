@@ -22,6 +22,9 @@ class WassengerApiEndpoints
 
     public const NUMBER_EXIST = ['numbers/exists', 'POST'];
     public const DEVICE_SYNC = ['devices/{deviceId}/sync', 'GET'];
+
+    public const DEVICES = ['devices', 'GET'];
+    public const GET_DEVICE_BY_ID = ['devices/{deviceId}', 'GET'];
    
     
 }

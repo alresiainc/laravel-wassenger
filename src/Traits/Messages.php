@@ -277,7 +277,7 @@ trait Messages
             $data = self::$data;
             if ($data == null) {
                 throw new BadMethodCallException('Your Request is a Missing A Required Method');
-                trigger_error("Value must be 1 or below");
+               
             }
 
 

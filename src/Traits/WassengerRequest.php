@@ -81,6 +81,7 @@ trait WassengerRequest
     {
         $clean = false;
         $pattern = "/({\w+})/";
+        if($data == null || empty($data)) $data = [];
 
         $isIndexed = array_unique(array_map("is_int", array_keys($data))) === array(true);
         $isAssoc = array_unique(array_map("is_string", array_keys($data))) === array(true);
@@ -103,7 +104,7 @@ trait WassengerRequest
             }
         }
 
-        if (!preg_match("/({\w+})/", $str)) $clean = true;
+        if (!preg_match("/({\w+})/", $url)) $clean = true;
 
         $value = ['clean' => $clean, 'value' => $url];
 
@@ -123,11 +124,6 @@ trait WassengerRequest
         $method = $routeName[1];
         $path = $this->routeWorker($routeName[0], $routeData);
 
-        // if (isset($routeName[2])) {
-        //     $attached = $routeName[2];
-        // } else {
-        //     $attached = false;
-        // }
 
 
         if (!is_callable('curl_init')) {
@@ -141,6 +137,7 @@ trait WassengerRequest
 
        
         $url = $this->api_url . "/v" . $this->api_version . "/" . $path;
+        
         
 
         if (isset($params) && !empty($params)) {
@@ -157,7 +154,7 @@ trait WassengerRequest
 
         if (strtolower($method) == "get") $url = $url . '?' . $data;
         $curl = curl_init($url);
-
+        
         if (strtolower($method) != "get") {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
             if (isset($params)) {

@@ -22,6 +22,7 @@ class Config
     public const API_KEY = '';
     public const API_HOST = 'https://api.wassenger.com';
     public const API_VERSION = 1;
+    public const DEFAULT_DEVICE = null;
 
     /*
     |--------------------------------------------------------------------------
