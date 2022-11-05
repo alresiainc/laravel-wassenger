@@ -300,7 +300,7 @@ trait Messages
             }
 
 
-            return $this->Request(WassengerApiEndpoints::UPDATE_MESSAGE, $data, $id);
+            return $this->Request(WassengerApiEndpoints::UPDATE_MESSAGE, $data, ['messageId' => $id]);
         } else {
             throw new LaravelWassengerException('Invalid ID: Please Specify an ID using the findById() Method');
         }
@@ -347,7 +347,7 @@ trait Messages
         } elseif (isset(self::$message_id) && !empty(self::$message_id)) {
 
             $id = self::$message_id;
-            return $this->Request(WassengerApiEndpoints::GET_MESSAGE_BY_ID, null, $id);
+            return $this->Request(WassengerApiEndpoints::GET_MESSAGE_BY_ID, null, ['messageId' => $id]);
         }
     }
 
@@ -367,10 +367,10 @@ trait Messages
         $id = $message_id ?? self::$message_id;
         if (isset(self::$message_id) && !empty(self::$message_id)) {
 
-            return $instance->Request(WassengerApiEndpoints::DELETE_MESSAGE, null, self::$message_id);
+            return $instance->Request(WassengerApiEndpoints::DELETE_MESSAGE, null, ['messageId' => self::$message_id]);
         } elseif (isset($message_id) && !empty($message_id)) {
 
-            return $instance->Request(WassengerApiEndpoints::DELETE_MESSAGE, null, $message_id);
+            return $instance->Request(WassengerApiEndpoints::DELETE_MESSAGE, null, ['messageId' => $message_id]);
         } else {
             throw new LaravelWassengerException('Invalid ID: Please Specify an ID or use the findById() Method');
         }

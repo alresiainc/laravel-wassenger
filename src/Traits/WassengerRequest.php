@@ -117,17 +117,17 @@ trait WassengerRequest
      * @param object|array $param
      * @param string $param
      */
-    public function Request($routeName, $params = null, $attachment = null, $routeData = null)
+    public function Request($routeName, $params = null, $routeData = null)
     {
 
         $method = $routeName[1];
-        $path = $this->routeWorker($routeName[0], $routeData, true);
+        $path = $this->routeWorker($routeName[0], $routeData);
 
-        if (isset($routeName[2])) {
-            $attached = $routeName[2];
-        } else {
-            $attached = false;
-        }
+        // if (isset($routeName[2])) {
+        //     $attached = $routeName[2];
+        // } else {
+        //     $attached = false;
+        // }
 
 
         if (!is_callable('curl_init')) {
@@ -139,11 +139,9 @@ trait WassengerRequest
         }
 
 
-        if ($attached == true && $attachment != null) {
-            $url = $this->api_url . "/v" . $this->api_version . "/" . $path . "/" . $attachment;
-        } else {
-            $url = $this->api_url . "/v" . $this->api_version . "/" . $path;
-        };
+       
+        $url = $this->api_url . "/v" . $this->api_version . "/" . $path;
+        
 
         if (isset($params) && !empty($params)) {
             $data = http_build_query($params);

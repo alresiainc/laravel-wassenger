@@ -15,9 +15,9 @@ class WassengerApiEndpoints
      */
     public const SEARCH_MESSAGES = ['messages', 'GET'];
     public const SEND_MESSAGE = ['messages', 'POST'];
-    public const GET_MESSAGE_BY_ID = ['messages', 'GET', true];
-    public const UPDATE_MESSAGE = ['messages', 'PATCH', true];
-    public const DELETE_MESSAGE = ['messages', 'DELETE', true];
+    public const GET_MESSAGE_BY_ID = ['messages/{messageId}', 'GET'];
+    public const UPDATE_MESSAGE = ['messages/{messageId}', 'PATCH'];
+    public const DELETE_MESSAGE = ['messages/{messageId}', 'DELETE'];
 
 
     public const NUMBER_EXIST = ['numbers/exists', 'POST'];
