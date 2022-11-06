@@ -1,6 +1,7 @@
 <?php
 namespace Alresia\LaravelWassenger;
 
+use Alresia\LaravelWassenger\WassengerApiEndpoints;
 use Alresia\LaravelWassenger\Traits\WassengerRequest;
 
 /**

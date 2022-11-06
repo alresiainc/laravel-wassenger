@@ -1,4 +1,4 @@
-# LARAVEL WESSENGER DOCUMENTATION
+# LARAVEL WASSENGER DOCUMENTATION
 
 WhatsApp Business Api for Larave Using Wassenger Api
 ![laravel-wassenger-logo](https://user-images.githubusercontent.com/42520408/197910318-c42baeae-9799-4b43-8bc1-94bf3cdd95cb.png)
@@ -31,7 +31,7 @@ or run
 composer require alresia/laravel-wassenger
 ```
 
-### From Laravel Controller
+#### From Laravel Controller
 
 ```php
 <?php
@@ -160,7 +160,7 @@ Change the `Return JSON Errors` to `true` from the config file
 ```php
  public const RETURN_JSON_ERRORS = true;
 ```
-This is usefull if you want to manage responses
+This is usefull if you want to manage error responses
 
 ## USAGE
 This deals with four endpoint of Wassenger. Doh it only has the most used and important functions
@@ -169,12 +169,12 @@ This deals with four endpoint of Wassenger. Doh it only has the most used and im
 | --------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `Wassenger::class`[*](#main)            | This is the main class of Laravel Wassenger. It contain most usefull methods controlling the packages |
 | `Messages::class`[*](#messages-methods) | Send, browse and manage outbound messages                                                             |
-| `Session::class`                        | Manage WhatsApp session status synchronization.                                                       |
-| `Device::class`                         | Manage Conneted Device and See status.                                                                |
+| `Devices::class`             [*](#device)                   | Manage Conneted Device and See status.                                                                |
+| `Session::class`                 | Manage WhatsApp session status synchronization.                                                       |
 
 
-## Classes Methods
-### Main
+## Classes
+### Main Wassenger Class
 <!-- ### `Wassenger::class` -->
 
 >To use include the `LaravelWassenger\Wassenger` namespace in your file;
@@ -187,29 +187,33 @@ The following available methods are:
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
 | `numberExist()` <br> [see example](#number-exist)       | Check if a given phone number exists in WhatsApp and is able to receive messages. The number format must be in E164 format. <br>You can check one number at a time. | @param [String](#params) `$phone` *required            |
 | `sessionSync()` <br>[see example](#sync-device-session) | Force WhatsApp session status synchronization of a device. <br>**Note:** if you do not specify an ID, will use default device id from config                        | @param [String\|Null](#params) `$deviceId` **optional* |
-| `syncAll()` <br>[see example](#sync-all-device-session) | Force synchronize all device session status.<br>**Note:** Avoid running this function if you have too many device in connected to your account.                     | @param [Null](#params)                                 |
+| `syncAll()` <br>[see example](#sync-all-device-session) | Force synchronize all device session status.<br>**Note:** *This method uses a loop in getting all devices then synchronize them. It will skip device that is already synchronized or last synchronize in less than 60 seconds. <br>Avoid running this function if you have too many device in connected to your account.*                     | @param [Null](#params)                                 |
 
-## Examples
+### Examples:
 
-### Number Exist
-
-```php
-Wassenger::numberExist('+234805599570');
-```
-
-### Sync device session
+#### Number Exist
 
 ```php
 Wassenger::numberExist('+234805599570');
 ```
 
-### Sync all device session
+#### Sync device session
+
+```php
+Wassenger::sessionSync('63615bb1db0ssb686cee2fa4a');
+```
+
+```php
+Wassenger::sync('63615bb1db0ssb686cee2fa4a');
+```
+
+#### Sync all device session
 
 ```php
 Wassenger::syncAll();
 ```
 
-## Messages Methods
+### Messages
 <!-- ### `Messages::class` -->
 
 >To use include the `LaravelWassenger\Messages` namespace in your file;
@@ -238,41 +242,41 @@ The following available methods for sending messages in this package, which you 
 | `raw()`                                                                                                                               | Direct use wassenger Api. if you are not satisfy with laraval-wassenger or you can't find what you want here. you can send request directly using this method  **Use**     add desires params     `Messages::raw($paramsArray)->send();`                                                                  | `objects` (required)                                                                                                                                                                                                                     |
 | `search()`      <br> [see example]()                                                                                                  | Searching from message list.                                                                                                                                                                                                                                                                              | `arrays` (required)                                                                                                                                                                                                                      |
 | `find()`                                                                                                                              | Alternatives for `search()`.                                                                                                                                                                                                                                                                              | `arrays` (required)                                                                                                                                                                                                                      |
-| `get()`                                                                                                                               | Get the Specific Resource.                                                                                                                                                                                                                                                                                | `null`                                                                                                                                                                                                                                   |
+| `get()`                                                                                                                               | Get the Specified Resource.                                                                                                                                                                                                                                                                               | `null`                                                                                                                                                                                                                                   |
 | `delete()`                                                                                                                            | Delete the specific resource.                                                                                                                                                                                                                                                                             | `string`  `null`                                                                                                                                                                                                                         |
 | `send()`                                                                                                                              | This method initailizes and connect to the message to Wassenger endpoint.                                                                                                                                                                                                                                 | `none`                                                                                                                                                                                                                                   |
 
-# Example Usage
+### Example Usage
 
-### Send text message to a phone number
+#### Send text message to a phone number
 
 ```php
 Messages::message('+1234567890', 'Hello world! This is a simple test message')
     ->send();
 ```
 
-### Send text message with high priority to a group
+#### Send text message with high priority to a group
 
 ```php
 Messages::messageGroup('123456789000000000@g.us', 'Hello world! This is a simple test message', 'high')
     ->send();
 ```
 
-### Send media message to user. Note the file must be updated first, see API endpoint: Files > Upload file
+#### Send media message to user. Note the file must be updated first, see API endpoint: Files > Upload file
 
 ```php
 Messages::messageGroup('+1234567890', 'Hello world! This is a test media message.', 'high')
     ->media(['file', '<24 characters length file ID>'])
     ->send();
 ```
-### Send text message that should be delivered now
+#### Send text message that should be delivered now
 
 ```php
 Messages::message('+1234567890', 'Hello world! This is a simple test message', false)
     ->send();
 ```
 
-### Send a scheduled messages with a custom delay. 
+#### Send a scheduled messages with a custom delay. 
 >See "schedule.delayTo" datetime notation shortcuts: https://i.ibb.co/g3DJLSH/datetime-shortcuts.png
 
 ```php
@@ -281,7 +285,7 @@ Messages::message('+1234567890', 'Hello world! This is a simple test message')
     ->send();
 ```
 
-### Send a scheduled messages at a concrete date with a valid ISO 8601 date
+#### Send a scheduled messages at a concrete date with a valid ISO 8601 date
 
 ```php
 Messages::message('+1234567890', 'Hello world! This is a simple test message')
@@ -289,7 +293,7 @@ Messages::message('+1234567890', 'Hello world! This is a simple test message')
     ->send();
 ```
 
-### If You want to attach action buttons to your message
+#### If You want to attach action buttons to your message
 
 ```php
 $buttons = [
@@ -315,14 +319,14 @@ Messages::message('+1234567890', 'Hello world! This is a simple test message')
     ->send();
 ```
 
-### Getting a Message
+#### Getting a Message
 
 ```php
 Messages::findById('635889e9133a76fddfdfy65r5')
     ->get();
 ```
 
-### Updating a Message
+#### Updating a Message
 
 ```php
 Messages::findById('635889e9133a76fddfdfy65r5')
@@ -330,7 +334,7 @@ Messages::findById('635889e9133a76fddfdfy65r5')
     ->update();
 ```
 
-### Deleting a Message
+#### Deleting a Message
 
 ```php
 Messages::findById('635889e9133a76fddfdfy65r5')
@@ -340,6 +344,115 @@ Messages::findById('635889e9133a76fddfdfy65r5')
 ```php
 Messages::delete('635889e9133a76fddfdfy65r5');
 ```
+
+
+### Device
+
+
+>To use include the `LaravelWassenger\Device` namespace in your file;
+```php
+use Alresia\LaravelWassenger\Device;
+```
+The following available methods are:
+
+| Method                             | Description                                                                                                                                       | Parameters                                                                                                                                                                                        |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `findById()` <br> [see example](#get-device-by-id) | Retrieve device details by ID.                                                                                                                    | @param [String](#params) `$deviceId` *required                                                                                                                                                    |
+| `search()` <br>[see example](#search-devices-by-phone-number-alias-or-ids)    | Search devices by phone number, alias or ID. For multiple value searches use comma-separeted values. E.g: +2348113536471,61b37a069cba0c15d6c81000 | @param [String](#params) `$values`                                                                                                                                                                |
+| `status()` <br>[see example](#get-only-pending-devices)    | Search devices by status. E.g: operative, pending, disabled, removed                                                                              | @param [String](#params) Default: `"any"` Enum: `"any"` `"invalid"` `"banned"` `"removed"` `"disabled"` `"unpaid`" `"preload"` `"pending"` `"authorized"` `"verified"` `"operative"`              |
+| `session()` <br>[see example](#get-device-by-session-online)   | Search devices by session status. E.g: authorize, online, timeout, offline, error                                                                 | @param [String](#params) Enum: `"any"` `"online"` `"offline"` `"timeout"` `"timeout_sync"` `"conflict"` `"blocked"` `"error"` `"authorize"` `"authorizing"` `"new"` `"loading"` `"offline_panel"` |
+| `limit()` <br>[see example](#sorting-result)     | Limiting the size of the result and get result by pages. This method helps when working with paginations                                          | @param [String](#params) `$size` <br> <integer\> `[ 0 .. 50 ]` <br> Default: 0 <br>@param [String](#params)  `$page`   <br> \<integer> `[ 1 .. 100 ]` <br> Default: 0                             |
+| `get()` <br>[see example](#also-you-can-select-or-use-all-params-incase-not-listed-here-using-the-get)       | Get the Specified Resource.                                                                                                                       | @param [Arrays\|Objects                                                                                                                                                                           | Null](#params) `$data` |
+
+## Examples:
+
+#### Get account devices
+
+```php
+Devices::get();
+```
+
+#### Get device by ID
+
+```php
+Devices::findById('63615bb1db0b686cee2fa4af')->get();
+```
+
+#### Search devices by phone number, alias or IDs
+
+```php
+Devices::search('+2348113536471,61b37a069cba0c15d6c81000')->get();
+```
+
+#### Get only verified devices
+
+```php
+Devices::status('verified')->get();
+```
+
+#### Get only pending devices
+```php
+Devices::status('pending')->get();
+```
+
+#### Get device by session online
+
+```php
+Devices::session('online')->get();
+```
+
+#### Get device session
+
+```php
+Devices::session('any')->get();
+```
+#### Search devices by phone number, alias or IDs that is verified
+
+```php
+Devices::search('+2348113536471,61b37a069cba0c15d6c81000')->status('verified')->get();
+```
+#### Search devices by phone number, alias or IDs that is online
+```php
+Devices::search('+2348113536471,61b37a069cba0c15d6c81000')->session('online')->get();
+```
+#### Search devices by phone number, alias or IDs that is online
+```php
+Devices::search('+2348113536471,61b37a069cba0c15d6c81000')->session('online')->get();
+```
+#### Sorting Result
+
+```php
+Devices::limit(20, 2)->get(); // size 20 page 2
+```
+
+```php
+Devices::search('+2348113536471,61b37a069cba0c15d6c81000')->session('online')->limit(20, 3)->get(); // size 20 page 3
+```
+
+>#### All method can be used after another
+```php
+Devices::session('any')->status('any')->limit(20, 0)->get(); // get() should always be the last
+```
+
+#### Also You can select or use all params incase not listed here using the get
+```php
+Devices::get([
+    'search' => '+2348113536471,61b37a069cba0c15d6c81000',
+    'status' => 'any',
+    'sessionStatus' => 'online',
+    'size' => '20',
+    'page' => '3',
+]); 
+```
+
+## Sessions
+This function is already exist in other class methods
+```php
+use Alresia\LaravelWassenger\Session;
+
+Session::sync('63615bb1db0b686cee2fa4af');
+```
+>see [https://app.wassenger.com/docs/#tag/Devices/operation/searchDevices](https://app.wassenger.com/docs/#tag/Devices/operation/searchDevices) to use this method properly
 
 
 ## Contributing

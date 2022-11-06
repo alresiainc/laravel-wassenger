@@ -1,5 +1,14 @@
+1.2.0 (2022-11-06)
+------------------
+
+Added More Features
+* Added New Devices Class `Alresia\LaravelWassenger\Devices`
+  
+  *Allows you view and synchronize device*
+
 1.1.1 (2022-11-05)
 ------------------
+
 
 * Fix Minor Bug.
 * Added New Session Class `Alresia\LaravelWassenger\Session`

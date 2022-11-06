@@ -4,9 +4,10 @@ namespace Alresia\LaravelWassenger;
 
 use stdClass;
 use Alresia\LaravelWassenger\Config;
+use Alresia\LaravelWassenger\Devices;
 use Alresia\LaravelWassenger\Traits\Messages;
+use Alresia\LaravelWassenger\WassengerApiEndpoints;
 use Alresia\LaravelWassenger\Traits\WassengerRequest;
-use Illuminate\Support\Facades\Log;
 
 
 /**
@@ -73,7 +74,7 @@ class Wassenger
 
 
 
-        $allDevice = Device::get();
+        $allDevice = Devices::get();
         $totalSynd = 0;
         $lastSyncDevice = '';
         $lastSyncAt = '';

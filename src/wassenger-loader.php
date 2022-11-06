@@ -8,7 +8,7 @@ require __DIR__.'/Traits/Messages.php';
 require __DIR__.'/Wassenger.php';
 require __DIR__.'/Messages.php';
 require __DIR__.'/Session.php';
-require __DIR__.'/Device.php';
+require __DIR__.'/Devices.php';
 require __DIR__.'/Config.php';
 
 /** To easily access the config file copy Config.php 

@@ -233,7 +233,7 @@ trait Messages
 
         $checkNumber = $this->checkNumber($data->phone);
 
-        if($checkNumber->exists != true){
+        if(isset($checkNumber->exists) && $checkNumber->exists != true){
 
             return $checkNumber;
         }

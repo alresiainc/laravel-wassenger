@@ -3,12 +3,13 @@
 namespace Alresia\LaravelWassenger;
 
 use stdClass;
+use Alresia\LaravelWassenger\WassengerApiEndpoints;
 use Alresia\LaravelWassenger\Traits\WassengerRequest;
 
 /**
  * @internal
  */
-class Device
+class Devices
 {
 
     private static $divice_ids;
