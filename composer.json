@@ -5,7 +5,7 @@
     "type": "library",
     "license": "MIT",
     "version": "1.2.1",
-    "homepage": "https://github.com/alresiainc/laravel-wassenger",
+    "homepage": "https://github.com/alresiainc/laravel-wassenger#",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "support": {

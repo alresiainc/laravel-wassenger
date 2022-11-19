@@ -7,7 +7,8 @@ WhatsApp Business Api for Larave Using Wassenger Api
 
 ## INTRODUCTION
 
-This API documentation provides detailed information about the LARAVEL WASSENGER and WASSENGER endpoints request/response API contracts.
+This API documentation provides detailed information about the LARAVEL WASSENGER and WASSENGER endpoints request/response API contracts. 
+
 
 You can easily connect, send request and recieve response on most usable and important endpoint in wassenger using php.
 

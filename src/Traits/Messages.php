@@ -229,7 +229,7 @@ trait Messages
             throw new BadMethodCallException('Your Request is a Missing A Required Method');
         }
         
-        if($data->phone){
+        if(isset($data->phone)){
             $checkNumber = $this->checkNumber($data->phone);
             if(isset($checkNumber->exists) && $checkNumber->exists != true){
                 return $checkNumber;
