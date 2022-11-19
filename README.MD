@@ -7,11 +7,11 @@ WhatsApp Business Api for Larave Using Wassenger Api
 
 ## INTRODUCTION
 
-This API documentation provides detailed information about the LARAVEL WASSENGER and WASSENGER endpoints and request/response API contracts.
+This API documentation provides detailed information about the LARAVEL WASSENGER and WASSENGER endpoints request/response API contracts.
 
-You can easily connect, send request and recieving response on most usable and important endpoint in wassenger using php.
+You can easily connect, send request and recieve response on most usable and important endpoint in wassenger using php.
 
-This Package has been built with expection to help ease connection and intergrating WhatsApp on our Application.
+This Package has been built with expection to help ease the time connecting and intergrating WhatsApp on our Application.
 
 With the help of Wassenger Api and it well structured to work on Laravel framework.
 
@@ -139,7 +139,7 @@ The WASSENGER_API_KEY is Required to use this package
 
 
 
->To get Your API KEY go to [Wassanger Console](https://app.wassenger.com/apikeys) add Get a Api Key
+>To get Your API KEY go to [Wassanger Console](https://app.wassenger.com/apikeys) and Get a Api Key
 
 if you are using Larevel just head over to your `.env` file to set your Api key and Default device
 ```php
@@ -165,12 +165,12 @@ This is usefull if you want to manage error responses
 ## USAGE
 This deals with four endpoint of Wassenger. Doh it only has the most used and important functions
 
-| Class                                     | Description                                                                                           |
-| ----------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `Wassenger::class`[*](#main)              | This is the main class of Laravel Wassenger. It contain most usefull methods controlling the packages |
-| `Messages::class`[*](#messages-methods)   | Send, browse and manage outbound messages                                                             |
-| `Devices::class`             [*](#device) | Manage Conneted Device and See status.                                                                |
-| `Session::class`                          | Manage WhatsApp session status synchronization.                                                       |
+| Class                                        | Description                                                                                           |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `Wassenger::class`[*](#main-wassenger-class) | This is the main class of Laravel Wassenger. It contain most usefull methods controlling the packages |
+| `Messages::class`[*](#messages)              | Send, browse and manage outbound messages                                                             |
+| `Devices::class`             [*](#device)    | Manage Conneted Device and See status.                                                                |
+| `Session::class`                             | Manage WhatsApp session status synchronization.                                                       |
 
 
 ## Classes
@@ -183,18 +183,18 @@ use Alresia\LaravelWassenger\Wassenger;
 ```
 The following available methods are:
 
-| Method                                                  | Description                                                                                                                                                                                                                                                                                                               | Parameters                                             |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `numberExist()` <br> [see example](#number-exist)       | Check if a given phone number exists in WhatsApp and is able to receive messages. The number format must be in E164 format. <br>You can check one number at a time.                                                                                                                                                       | @param [String](#params) `$phone` *required            |
-| `sessionSync()` <br>[see example](#sync-device-session) | Force WhatsApp session status synchronization of a device. <br>**Note:** if you do not specify an ID, will use default device id from config                                                                                                                                                                              | @param [String\|Null](#params) `$deviceId` **optional* |
-| `syncAll()` <br>[see example](#sync-all-device-session) | Force synchronize all device session status.<br>**Note:** *This method uses a loop in getting all devices then synchronize them. It will skip device that is already synchronized or last synchronize in less than 60 seconds. <br>Avoid running this function if you have too many device in connected to your account.* | @param [Null](#params)                                 |
+| Method                                                  | Description                                                                                                                                                                                                                                                                                                            | Parameters                                             |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `numberExist()` <br> [see example](#number-exist)       | Check if a given phone number exists in WhatsApp and is able to receive messages. The number format must be in E164 format. <br>You can check one number at a time.                                                                                                                                                    | @param [String](#params) `$phone` *required            |
+| `sessionSync()` <br>[see example](#sync-device-session) | Force WhatsApp session status synchronization of a device. <br>**Note:** if you do not specify an ID, will use default device id from config                                                                                                                                                                           | @param [String\|Null](#params) `$deviceId` **optional* |
+| `syncAll()` <br>[see example](#sync-all-device-session) | Force synchronize all device session status.<br>**Note:** *This method uses a loop in getting all devices then synchronize them. It will skip device that is already synchronized or last synchronize in less than 60 seconds. <br>Avoid running this function if you have too many device connected to your account.* | @param [Null](#params)                                 |
 
 ### Examples:
 
 #### Number Exist
 
 ```php
-Wassenger::numberExist('+234805599570');
+Wassenger::numberExist('+1234567890');
 ```
 
 #### Sync device session
@@ -221,7 +221,7 @@ Wassenger::syncAll();
 use Alresia\LaravelWassenger\Messages;
 ```
 
-The following available methods for sending messages in this package, which you can [See the full details here](https://app.wassenger.com/docs/#tag/Messages):
+The following available methods are available for sending messages in this package, which you can [See the full details here](https://app.wassenger.com/docs/#tag/Messages):
 
 | Method                                                                                                                                | Description                                                                                                                                                                                                                                                                                               | Parameters                                                                                                                                                                                                                               |
 | ------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

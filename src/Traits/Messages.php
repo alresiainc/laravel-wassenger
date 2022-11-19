@@ -228,15 +228,16 @@ trait Messages
         if ($data == null && $RawData == null) {
             throw new BadMethodCallException('Your Request is a Missing A Required Method');
         }
+        
+        if($data->phone){
+            $checkNumber = $this->checkNumber($data->phone);
+            if(isset($checkNumber->exists) && $checkNumber->exists != true){
+                return $checkNumber;
+            }
+        }
+        
 
        
-
-        $checkNumber = $this->checkNumber($data->phone);
-
-        if(isset($checkNumber->exists) && $checkNumber->exists != true){
-
-            return $checkNumber;
-        }
 
 
         if (is_array($RawData) || is_object($RawData)) {
